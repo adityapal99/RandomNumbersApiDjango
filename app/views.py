@@ -31,4 +31,11 @@ class RandomNumbersView(APIView):
         return Response(data={
             "message": "Random Numbers Stored",
             "status": True
+        }, status=201)
+
+    def delete(self, request):
+        deleted = RandomNumbers.objects.earliest('id').delete()
+        return Response(data={
+            'message': 'Deleted all datas',
+            'status': True
         }, status=200)

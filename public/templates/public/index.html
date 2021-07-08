@@ -9,11 +9,31 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .table-row {
+            animation-name: fadeIn;
+            animation-duration: 1s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            
+            to {
+                opacity: 1;
+                transform: translateX(0px);
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between" style="justify-content: space-between;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-lg-between" style="justify-content: space-between;">
         <div class="btn btn-dark ms-5" id="getButton">GET</div>
-        <div class="btn btn-dark me-5 float-end" id="putButton">PUT</div>
+        <div class="btn btn-dark ms-5" id="delButton">DELETE</div>
+        <div class="btn btn-dark me-5" id="putButton">PUT</div>
     </nav>
     <div class="content_body container container-fluid mt-5">
 
@@ -36,7 +56,7 @@
 
         <tbody>
             {{#each data}}
-                <tr>
+                <tr class="table-row">
                     <th scope="row">{{id}}</th>
                     <td>{{number1}}</td>
                     <td>{{number2}}</td>
@@ -51,6 +71,7 @@
     </script>
     {% endverbatim %}
     <script type="text/javascript">
+
         var tab_temp = $('#table-template').html()
         var temp = Handlebars.compile(tab_temp)
 
@@ -59,6 +80,23 @@
             $.get("apis/random/", (data, status) => {
                 var html = temp(data)
                 $('.content_body').html(html)
+                $(".table-row").hide();
+
+                $(".table-row").each( function(index) {
+                    $(this).delay(index*200).show(100);
+                });
+            })
+        })
+
+        $('#delButton').click((eventObject) => {
+            $.ajax({
+                url: '/apis/random/',
+                type: 'DELETE',
+                success: function(result)  {
+
+                    $(".table-row")[-1].delay(index*200).hide(100);
+
+                }
             })
         })
 
